@@ -80,6 +80,11 @@ class Station(object):
         return self.info['short_name']
 
     @property
+    def region_id(self):
+        self.updateData()
+        return self.info['region_id']
+
+    @property
     def lat(self):
         self.updateData()
         return self.info['lat']
@@ -140,6 +145,7 @@ class Station(object):
 class Network(object):
     def __init__(self):
         self._infoPath = 'https://gbfs.citibikenyc.com/gbfs/en/station_information.json'
+        self._statusPath = 'https://gbfs.citibikenyc.com/gbfs/en/station_status.json'
         self.station_list = self.get_all_stations()
     
     def get_all_stations(self):
@@ -167,3 +173,16 @@ class Network(object):
             totalBikes += station['capacity']
         return totalBikes
     
+    @property
+    def total_bikes_rented(self):
+        response = session.get(self._statusPath)
+        response2 = session.get(self._infoPath)
+        statusJson = response.json()['data']['stations']
+        infoJson = response2.json()['data']['stations']
+        totalBikes = 0
+        for index, station in enumerate(statusJson):
+            capacity = infoJson[index]['capacity']
+            available = station['num_bikes_available']
+            rented = capacity - available
+            totalBikes += rented
+        return totalBikes
