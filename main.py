@@ -4,6 +4,6 @@ def test_station_info():
     station_instance = Station(304)
     networkInstance = Network()
 
-    print(networkInstance.total_bikes_rented)
+    print(networkInstance.capacity)
 
 test_station_info()

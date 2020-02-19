@@ -147,7 +147,7 @@ class Network(object):
         self._infoPath = 'https://gbfs.citibikenyc.com/gbfs/en/station_information.json'
         self._statusPath = 'https://gbfs.citibikenyc.com/gbfs/en/station_status.json'
         self.station_list = self.get_all_stations()
-    
+
     def get_all_stations(self):
         path = 'https://gbfs.citibikenyc.com/gbfs/en/station_information.json'
         response = session.get(path)
@@ -172,6 +172,8 @@ class Network(object):
         for station in stationList:
             totalBikes += station['capacity']
         return totalBikes
+    #Adds an "alias" for total_bikes
+    capacity = total_bikes
     
     @property
     def total_bikes_rented(self):
